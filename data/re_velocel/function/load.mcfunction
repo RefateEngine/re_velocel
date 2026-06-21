@@ -1,37 +1,35 @@
 scoreboard objectives add re_velocel dummy
 
-scoreboard objectives add re_velocel_posX dummy
-scoreboard objectives add re_velocel_posY dummy
-scoreboard objectives add re_velocel_posZ dummy
+scoreboard objectives add re_velocel_posX dummy "X座標(1000倍)"
+scoreboard objectives add re_velocel_posY dummy "Y座標(1000倍)"
+scoreboard objectives add re_velocel_posZ dummy "Z座標(1000倍)"
 
-scoreboard objectives add re_velocel_velX dummy
-scoreboard objectives add re_velocel_velY dummy
-scoreboard objectives add re_velocel_velZ dummy
+scoreboard objectives add re_velocel_velX dummy "X速度(1000倍)"
+scoreboard objectives add re_velocel_velY dummy "Y速度(1000倍)"
+scoreboard objectives add re_velocel_velZ dummy "Z速度(1000倍)"
 
-scoreboard objectives add re_velocel_accelX dummy
-scoreboard objectives add re_velocel_accelY dummy
-scoreboard objectives add re_velocel_accelZ dummy
+scoreboard objectives add re_velocel_accelX dummy "X加速度(1000倍)"
+scoreboard objectives add re_velocel_accelY dummy "Y加速度(1000倍)"
+scoreboard objectives add re_velocel_accelZ dummy "Z加速度(1000倍)"
 
-scoreboard objectives add re_velocel_velFB dummy
-scoreboard objectives add re_velocel_velRL dummy
+scoreboard objectives add re_velocel_velFB dummy "前後速度(1000倍)"
+scoreboard objectives add re_velocel_velRL dummy "左右速度(1000倍)"
 
-scoreboard objectives add re_velocel_accelFB dummy
-scoreboard objectives add re_velocel_accelRL dummy
+scoreboard objectives add re_velocel_accelFB dummy "前後加速度(1000倍)"
+scoreboard objectives add re_velocel_accelRL dummy "左右加速度(1000倍)"
 
-scoreboard objectives add re_velocel_velAngleYaw dummy
-scoreboard objectives add re_velocel_velAnglePitch dummy
+scoreboard objectives add re_velocel_velAngleYaw dummy "速度角度Yaw(10倍)"
+scoreboard objectives add re_velocel_velAnglePitch dummy "速度角度Pitch(10倍)"
 
-scoreboard objectives add re_velocel_accelAngleYaw dummy
-scoreboard objectives add re_velocel_accelAnglePitch dummy
+scoreboard objectives add re_velocel_accelAngleYaw dummy "加速度角度Yaw(10倍)"
+scoreboard objectives add re_velocel_accelAnglePitch dummy "加速度角度Pitch(10倍)"
 
-scoreboard objectives add re_velocel_velTotal dummy
-scoreboard objectives add re_velocel_accelTotal dummy
+scoreboard objectives add re_velocel_velTotal dummy "速度合計絶対値(1000倍)"
+scoreboard objectives add re_velocel_accelTotal dummy "加速度合計絶対値(1000倍)"
 
 
 
 scoreboard players set #re_velocel_scale re_velocel 1000
-scoreboard players set #re_velocel_negative re_velocel -1
-
 
 forceload add 0 0
 # 7bd848b4-0c9f-4328-912b-9a2b7244b2de
