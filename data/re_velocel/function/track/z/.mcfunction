@@ -114,12 +114,12 @@ scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velY
 execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_deadzoneXYZ re_velocel += #re_velocel_val re_velocel
 execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneXYZ re_velocel -= #re_velocel_val re_velocel
 
-execute if score #re_velocel_deadzoneXYZ re_velocel matches 50.. run function re_velocel:track/z/calc_vel_angle
+execute if score #re_velocel_deadzoneXYZ re_velocel matches 35.. run function re_velocel:track/z/calc_vel_angle
 
 # yawはxとzの動きだけ
-execute if score #re_velocel_deadzoneXZ re_velocel matches 50.. store result score @s re_velocel_velAngleYaw run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[0] 10
+execute if score #re_velocel_deadzoneXZ re_velocel matches 35.. store result score @s re_velocel_velAngleYaw run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[0] 10
 # pitchはyも加える
-execute if score #re_velocel_deadzoneXYZ re_velocel matches 50.. store result score @s re_velocel_velAnglePitch run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[1] 10
+execute if score #re_velocel_deadzoneXYZ re_velocel matches 35.. store result score @s re_velocel_velAnglePitch run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[1] 10
 
 
 # デッドゾーンを超えた場合最も加速度の大きい方向を計算する yaw pitch
@@ -140,12 +140,12 @@ scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_accelY
 execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_deadzoneXYZ re_velocel += #re_velocel_val re_velocel
 execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneXYZ re_velocel -= #re_velocel_val re_velocel
 
-execute if score #re_velocel_deadzoneXYZ re_velocel matches 50.. run function re_velocel:track/z/calc_accel_angle
+execute if score #re_velocel_deadzoneXYZ re_velocel matches 35.. run function re_velocel:track/z/calc_accel_angle
 
 # yawはxとzの動きだけ
-execute if score #re_velocel_deadzoneXZ re_velocel matches 50.. store result score @s re_velocel_accelAngleYaw run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[0] 10
+execute if score #re_velocel_deadzoneXZ re_velocel matches 35.. store result score @s re_velocel_accelAngleYaw run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[0] 10
 # pitchはyも加える
-execute if score #re_velocel_deadzoneXYZ re_velocel matches 50.. store result score @s re_velocel_accelAnglePitch run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[1] 10
+execute if score #re_velocel_deadzoneXYZ re_velocel matches 35.. store result score @s re_velocel_accelAnglePitch run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[1] 10
 
 
 # 速度の合計を計算 (プラスにそろえる)
