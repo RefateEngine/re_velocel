@@ -18,9 +18,16 @@ scoreboard objectives add re_velocel_velRL dummy
 scoreboard objectives add re_velocel_accelFB dummy
 scoreboard objectives add re_velocel_accelRL dummy
 
-scoreboard objectives add re_velocel_velAngle dummy
+scoreboard objectives add re_velocel_velAngleYaw dummy
+scoreboard objectives add re_velocel_velAnglePitch dummy
 
-scoreboard objectives add re_velocel_accelAngle dummy
+scoreboard objectives add re_velocel_accelAngleYaw dummy
+scoreboard objectives add re_velocel_accelAnglePitch dummy
+
+scoreboard objectives add re_velocel_velTotal dummy
+scoreboard objectives add re_velocel_accelTotal dummy
+
+
 
 scoreboard players set #re_velocel_scale re_velocel 1000
 scoreboard players set #re_velocel_negative re_velocel -1

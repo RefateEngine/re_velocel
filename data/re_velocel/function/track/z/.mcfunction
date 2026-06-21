@@ -75,6 +75,7 @@ execute store result score #re_velocel_matrixX re_velocel run data get storage r
 scoreboard players operation #re_velocel_matrixX re_velocel *= @s re_velocel_velX
 scoreboard players operation #re_velocel_matrixX re_velocel /= #re_velocel_scale re_velocel
 
+execute store result score #re_velocel_matrixZ re_velocel run data get storage re_velocel: calc.rightVector[2] 1000
 scoreboard players operation #re_velocel_matrixZ re_velocel *= @s re_velocel_velZ
 scoreboard players operation #re_velocel_matrixZ re_velocel /= #re_velocel_scale re_velocel
 
@@ -82,34 +83,110 @@ scoreboard players operation @s re_velocel_velRL = #re_velocel_matrixX re_veloce
 scoreboard players operation @s re_velocel_velRL += #re_velocel_matrixZ re_velocel
 
 # 視点基準の右方向の加速度を計算する X,Z
-execute store result score #re_velocel_matrixZ re_velocel run data get storage re_velocel: calc.rightVector[2] 1000
+execute store result score #re_velocel_matrixX re_velocel run data get storage re_velocel: calc.rightVector[0] 1000
 scoreboard players operation #re_velocel_matrixX re_velocel *= @s re_velocel_accelX
 scoreboard players operation #re_velocel_matrixX re_velocel /= #re_velocel_scale re_velocel
 
+execute store result score #re_velocel_matrixZ re_velocel run data get storage re_velocel: calc.rightVector[2] 1000
 scoreboard players operation #re_velocel_matrixZ re_velocel *= @s re_velocel_accelZ
 scoreboard players operation #re_velocel_matrixZ re_velocel /= #re_velocel_scale re_velocel
 
 scoreboard players operation @s re_velocel_accelRL = #re_velocel_matrixX re_velocel
 scoreboard players operation @s re_velocel_accelRL += #re_velocel_matrixZ re_velocel
 
-# 速度が0以上の場合最も力の強い方向を計算する
+
+
+# 速度合計が50以上の場合最も力の強い方向を計算する yaw pitch
+function re_velocel:track/z/calc_vel_angle
+
+# デッドゾーン計算のために絶対値を計算
 scoreboard players operation #re_velocel_deadzoneX re_velocel = @s re_velocel_velX
 execute if score #re_velocel_deadzoneX re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneX re_velocel *= #re_velocel_negative re_velocel
+
+scoreboard players operation #re_velocel_deadzoneY re_velocel = @s re_velocel_velY
+execute if score #re_velocel_deadzoneY re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneY re_velocel *= #re_velocel_negative re_velocel
 
 scoreboard players operation #re_velocel_deadzoneZ re_velocel = @s re_velocel_velZ
 execute if score #re_velocel_deadzoneZ re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneZ re_velocel *= #re_velocel_negative re_velocel
 
+# yawはxとzの動きだけ
 scoreboard players operation #re_velocel_deadzoneX re_velocel += #re_velocel_deadzoneZ re_velocel
+execute if score #re_velocel_deadzoneX re_velocel matches 50.. store result score @s re_velocel_velAngleYaw run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[0] 10
+# pitchはyも加える
+scoreboard players operation #re_velocel_deadzoneX re_velocel += #re_velocel_deadzoneY re_velocel
+execute if score #re_velocel_deadzoneX re_velocel matches 50.. store result score @s re_velocel_velAnglePitch run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[1] 10
 
-execute if score #re_velocel_deadzoneX re_velocel matches 50.. run function re_velocel:track/z/calc_vel_angle
 
-# 加速度が0以上の場合最も力の強い方向を計算する
+# 加速度合計が50以上の場合最も力の強い方向を計算する yaw pitch
+function re_velocel:track/z/calc_accel_angle
+
+# デッドゾーン計算のために絶対値を計算
 scoreboard players operation #re_velocel_deadzoneX re_velocel = @s re_velocel_accelX
 execute if score #re_velocel_deadzoneX re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneX re_velocel *= #re_velocel_negative re_velocel
+
+scoreboard players operation #re_velocel_deadzoneY re_velocel = @s re_velocel_accelY
+execute if score #re_velocel_deadzoneY re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneY re_velocel *= #re_velocel_negative re_velocel
 
 scoreboard players operation #re_velocel_deadzoneZ re_velocel = @s re_velocel_accelZ
 execute if score #re_velocel_deadzoneZ re_velocel matches ..-1 run scoreboard players operation #re_velocel_deadzoneZ re_velocel *= #re_velocel_negative re_velocel
 
+# yawはxとzの動きだけ
 scoreboard players operation #re_velocel_deadzoneX re_velocel += #re_velocel_deadzoneZ re_velocel
+execute if score #re_velocel_deadzoneX re_velocel matches 50.. store result score @s re_velocel_accelAngleYaw run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[0] 10
 
-execute if score #re_velocel_deadzoneX re_velocel matches 50.. run function re_velocel:track/z/calc_accel_angle
+# pitchはyも加える
+scoreboard players operation #re_velocel_deadzoneX re_velocel += #re_velocel_deadzoneY re_velocel
+execute if score #re_velocel_deadzoneX re_velocel matches 50.. store result score @s re_velocel_accelAnglePitch run data get entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation[1] 10
+
+
+
+# 速度の合計を計算 (プラスにそろえる)
+scoreboard players set #re_velocel_total re_velocel 0
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velX
+execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_total re_velocel += #re_velocel_val re_velocel
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_total re_velocel -= #re_velocel_val re_velocel
+
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velY
+execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_total re_velocel += #re_velocel_val re_velocel
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_total re_velocel -= #re_velocel_val re_velocel
+
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velZ
+execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_total re_velocel += #re_velocel_val re_velocel
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_total re_velocel -= #re_velocel_val re_velocel
+
+scoreboard players operation @s re_velocel_velTotal = #re_velocel_total re_velocel
+
+# 加速度の合計を計算 (プラスにそろえる)
+scoreboard players set #re_velocel_total re_velocel 0
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_accelX
+execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_total re_velocel += #re_velocel_val re_velocel
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_total re_velocel -= #re_velocel_val re_velocel
+
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_accelY
+execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_total re_velocel += #re_velocel_val re_velocel
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_total re_velocel -= #re_velocel_val re_velocel
+
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_accelZ
+execute if score #re_velocel_val re_velocel matches 1.. run scoreboard players operation #re_velocel_total re_velocel += #re_velocel_val re_velocel
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_total re_velocel -= #re_velocel_val re_velocel
+
+scoreboard players operation @s re_velocel_accelTotal = #re_velocel_total re_velocel
+
+# リセット　負荷が増えるのでしなくていいかな
+# scoreboard players reset #re_velocel_prevPosX re_velocel
+# scoreboard players reset #re_velocel_prevPosY re_velocel
+# scoreboard players reset #re_velocel_prevPosZ re_velocel
+
+# scoreboard players reset #re_velocel_prevVelX re_velocel
+# scoreboard players reset #re_velocel_prevVelY re_velocel
+# scoreboard players reset #re_velocel_prevVelZ re_velocel
+
+# scoreboard players reset #re_velocel_matrixX re_velocel
+# scoreboard players reset #re_velocel_matrixZ re_velocel
+
+# scoreboard players reset #re_velocel_deadzoneX re_velocel
+# scoreboard players reset #re_velocel_deadzoneY re_velocel
+# scoreboard players reset #re_velocel_deadzoneZ re_velocel
+
+# scoreboard players reset re_velocel_val re_velocel
+# scoreboard players reset re_velocel_total re_velocel
