@@ -34,7 +34,7 @@ scoreboard players set #re_velocel_scale re_velocel 1000
 forceload add 0 0
 # 7bd848b4-0c9f-4328-912b-9a2b7244b2de
 kill 7bd848b4-0c9f-4328-912b-9a2b7244b2de
-summon marker 0.0 0.0 0.0 {UUID:[I;2077771956,211764008,-1859413461,1917104862]}
+summon marker 0.0 0.0 0.0 {UUID:[I;2077771956,211764008,-1859413461,1917104862],Tags:["re_velocel_geometry"]}
 # 55ea1109-c187-e66c-94cc-59615a1a1555
 kill 55ea1109-c187-e66c-94cc-59615a1a1555
-summon marker 0.0 0.0 0.0 {UUID:[I;1441403145,-1048058260,-1798547103,1511658837]}
+summon marker 0.0 0.0 0.0 {UUID:[I;1441403145,-1048058260,-1798547103,1511658837],Tags:["re_velocel_geometry"]}
