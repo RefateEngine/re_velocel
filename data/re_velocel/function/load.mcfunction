@@ -27,8 +27,11 @@ scoreboard objectives add re_velocel_accelAnglePitch dummy "加速度角度Pitch
 scoreboard objectives add re_velocel_velTotal dummy "速度合計絶対値(1000倍)"
 scoreboard objectives add re_velocel_accelTotal dummy "加速度合計絶対値(1000倍)"
 
+scoreboard objectives add re_velocel_velLengthXZ dummy "平面ユークリッド距離(1000倍)"
 
 
+scoreboard players set #re_velocel_-1 re_velocel -1
+scoreboard players set #re_velocel_2 re_velocel 2
 scoreboard players set #re_velocel_scale re_velocel 1000
 
 forceload add 0 0

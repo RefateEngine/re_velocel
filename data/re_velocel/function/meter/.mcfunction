@@ -5,6 +5,7 @@ title @s actionbar [\
 "前後加速度",{score:{"name":"@s","objective":"re_velocel_accelFB"}},"左右加速度",{score:{"name":"@s","objective":"re_velocel_accelRL"}},\
 "速度角度:[",{score:{"name":"@s","objective":"re_velocel_velAngleYaw"}},",",{score:{"name":"@s","objective":"re_velocel_velAnglePitch"}},"]",\
 "加速度角度:[",{score:{"name":"@s","objective":"re_velocel_accelAngleYaw"}},",",{score:{"name":"@s","objective":"re_velocel_accelAnglePitch"}},"]",\
-"速度合計:",{score:{"name":"@s","objective":"re_velocel_velTotal"}},"可速度合計:",{score:{"name":"@s","objective":"re_velocel_accelTotal"}}\
+"速度合計:",{score:{"name":"@s","objective":"re_velocel_velTotal"}},"可速度合計:",{score:{"name":"@s","objective":"re_velocel_accelTotal"}},\
+"平面速度:",{score:{"name":"@s","objective":"re_velocel_velLengthXZ"}}\
 \
 ]

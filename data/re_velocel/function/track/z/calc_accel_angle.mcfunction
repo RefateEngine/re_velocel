@@ -6,3 +6,6 @@ execute store result entity 7bd848b4-0c9f-4328-912b-9a2b7244b2de Pos[2] double 0
 
 execute as 55ea1109-c187-e66c-94cc-59615a1a1555 at @s run rotate @s facing entity 7bd848b4-0c9f-4328-912b-9a2b7244b2de feet
 data modify storage re_velocel: calc.accelAngle set from entity 55ea1109-c187-e66c-94cc-59615a1a1555 Rotation
+
+tp 7bd848b4-0c9f-4328-912b-9a2b7244b2de 0.0 0.0 0.0
+tp 55ea1109-c187-e66c-94cc-59615a1a1555 0.0 0.0 0.0
