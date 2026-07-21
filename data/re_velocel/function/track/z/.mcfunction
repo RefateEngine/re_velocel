@@ -199,19 +199,19 @@ scoreboard players operation #re_velocel_val re_velocel = #re_velocel_lengthN re
 execute if score #re_velocel_lengthGuess re_velocel matches 0 run scoreboard players set #re_velocel_lengthGuess re_velocel 1
 scoreboard players operation #re_velocel_val re_velocel /= #re_velocel_lengthGuess re_velocel
 scoreboard players operation #re_velocel_lengthGuess re_velocel += #re_velocel_val re_velocel
-scoreboard players operation #re_velocel_lengthGuess re_velocel /= #2 const
+scoreboard players operation #re_velocel_lengthGuess re_velocel /= #re_velocel_2 re_velocel
 #
 scoreboard players operation #re_velocel_val re_velocel = #re_velocel_lengthN re_velocel
 execute if score #re_velocel_lengthGuess re_velocel matches 0 run scoreboard players set #re_velocel_lengthGuess re_velocel 1
 scoreboard players operation #re_velocel_val re_velocel /= #re_velocel_lengthGuess re_velocel
 scoreboard players operation #re_velocel_lengthGuess re_velocel += #re_velocel_val re_velocel
-scoreboard players operation #re_velocel_lengthGuess re_velocel /= #2 const
+scoreboard players operation #re_velocel_lengthGuess re_velocel /= #re_velocel_2 re_velocel
 
 scoreboard players operation #re_velocel_val re_velocel = #re_velocel_lengthN re_velocel
 execute if score #re_velocel_lengthGuess re_velocel matches 0 run scoreboard players set #re_velocel_lengthGuess re_velocel 1
 scoreboard players operation #re_velocel_val re_velocel /= #re_velocel_lengthGuess re_velocel
 scoreboard players operation #re_velocel_lengthGuess re_velocel += #re_velocel_val re_velocel
-scoreboard players operation #re_velocel_lengthGuess re_velocel /= #2 const
+scoreboard players operation #re_velocel_lengthGuess re_velocel /= #re_velocel_2 re_velocel
 
 scoreboard players operation @s re_velocel_velLengthXZ = #re_velocel_lengthGuess re_velocel
 
