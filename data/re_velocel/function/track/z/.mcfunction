@@ -1,40 +1,35 @@
 data modify storage re_velocel: calc set value {}
 
-# 座標をprevに移す
-scoreboard players operation #re_velocel_prevPosX re_velocel = @s re_velocel_posX
-scoreboard players operation #re_velocel_prevPosY re_velocel = @s re_velocel_posY
-scoreboard players operation #re_velocel_prevPosZ re_velocel = @s re_velocel_posZ
-
-# 座標を取得 (1000倍)
+# 新しい座標をストレージに取得
 execute at @s summon marker run function re_velocel:track/z/get_current_coords
+
+# 座標(1000倍)→速度→加速度を軸ごとに計算 (旧値は#re_velocel_prevPos/#re_velocel_prevVelを使い回す)
+# X軸
+scoreboard players operation #re_velocel_prevPos re_velocel = @s re_velocel_posX
+scoreboard players operation #re_velocel_prevVel re_velocel = @s re_velocel_velX
 execute store result score @s re_velocel_posX run data get storage re_velocel: calc.currentCoords[0] 1000
-execute store result score @s re_velocel_posY run data get storage re_velocel: calc.currentCoords[1] 1000
-execute store result score @s re_velocel_posZ run data get storage re_velocel: calc.currentCoords[2] 1000
-
-# 速度をprevに移す
-scoreboard players operation #re_velocel_prevVelX re_velocel = @s re_velocel_velX
-scoreboard players operation #re_velocel_prevVelY re_velocel = @s re_velocel_velY
-scoreboard players operation #re_velocel_prevVelZ re_velocel = @s re_velocel_velZ
-
-# 速度を計算 X,Y,Z
 scoreboard players operation @s re_velocel_velX = @s re_velocel_posX
-scoreboard players operation @s re_velocel_velX -= #re_velocel_prevPosX re_velocel
-
-scoreboard players operation @s re_velocel_velY = @s re_velocel_posY
-scoreboard players operation @s re_velocel_velY -= #re_velocel_prevPosY re_velocel
-
-scoreboard players operation @s re_velocel_velZ = @s re_velocel_posZ
-scoreboard players operation @s re_velocel_velZ -= #re_velocel_prevPosZ re_velocel
-
-# 加速度を計算 X,Y,Z
+scoreboard players operation @s re_velocel_velX -= #re_velocel_prevPos re_velocel
 scoreboard players operation @s re_velocel_accelX = @s re_velocel_velX
-scoreboard players operation @s re_velocel_accelX -= #re_velocel_prevVelX re_velocel
+scoreboard players operation @s re_velocel_accelX -= #re_velocel_prevVel re_velocel
 
+# Y軸
+scoreboard players operation #re_velocel_prevPos re_velocel = @s re_velocel_posY
+scoreboard players operation #re_velocel_prevVel re_velocel = @s re_velocel_velY
+execute store result score @s re_velocel_posY run data get storage re_velocel: calc.currentCoords[1] 1000
+scoreboard players operation @s re_velocel_velY = @s re_velocel_posY
+scoreboard players operation @s re_velocel_velY -= #re_velocel_prevPos re_velocel
 scoreboard players operation @s re_velocel_accelY = @s re_velocel_velY
-scoreboard players operation @s re_velocel_accelY -= #re_velocel_prevVelY re_velocel
+scoreboard players operation @s re_velocel_accelY -= #re_velocel_prevVel re_velocel
 
+# Z軸
+scoreboard players operation #re_velocel_prevPos re_velocel = @s re_velocel_posZ
+scoreboard players operation #re_velocel_prevVel re_velocel = @s re_velocel_velZ
+execute store result score @s re_velocel_posZ run data get storage re_velocel: calc.currentCoords[2] 1000
+scoreboard players operation @s re_velocel_velZ = @s re_velocel_posZ
+scoreboard players operation @s re_velocel_velZ -= #re_velocel_prevPos re_velocel
 scoreboard players operation @s re_velocel_accelZ = @s re_velocel_velZ
-scoreboard players operation @s re_velocel_accelZ -= #re_velocel_prevVelZ re_velocel
+scoreboard players operation @s re_velocel_accelZ -= #re_velocel_prevVel re_velocel
 
 
 
@@ -182,51 +177,47 @@ scoreboard players operation @s re_velocel_accelTotal = #re_velocel_total re_vel
 
 # ユークリッド距離を計算
 # X^2+Z^2の平方根が欲しい
-scoreboard players operation #re_velocel_velX^2 re_velocel = @s re_velocel_velX
-scoreboard players operation #re_velocel_velX^2 re_velocel *= #re_velocel_velX^2 re_velocel
-scoreboard players operation #re_velocel_velZ^2 re_velocel = @s re_velocel_velZ
-scoreboard players operation #re_velocel_velZ^2 re_velocel *= #re_velocel_velZ^2 re_velocel
-scoreboard players operation #re_velocel_velLengthN re_velocel = #re_velocel_velX^2 re_velocel
-scoreboard players operation #re_velocel_velLengthN re_velocel += #re_velocel_velZ^2 re_velocel
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velX
+scoreboard players operation #re_velocel_val re_velocel *= #re_velocel_val re_velocel
+scoreboard players operation #re_velocel_lengthN re_velocel = #re_velocel_val re_velocel
 
-# 初期値を決める
-scoreboard players operation #re_velocel_velAbsX re_velocel = @s re_velocel_velX
-execute if score #re_velocel_velAbsX re_velocel matches ..-1 run scoreboard players operation #re_velocel_velAbsX re_velocel *= #re_velocel_-1 re_velocel
-scoreboard players operation #re_velocel_velAbsZ re_velocel = @s re_velocel_velZ
-execute if score #re_velocel_velAbsZ re_velocel matches ..-1 run scoreboard players operation #re_velocel_velAbsZ re_velocel *= #re_velocel_-1 re_velocel
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velZ
+scoreboard players operation #re_velocel_val re_velocel *= #re_velocel_val re_velocel
+scoreboard players operation #re_velocel_lengthN re_velocel += #re_velocel_val re_velocel
 
-scoreboard players operation #re_velocel_velLengthX re_velocel = #re_velocel_velAbsX re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel > #re_velocel_velAbsZ re_velocel
+# 初期値を決める (絶対値の大きい方)
+scoreboard players operation #re_velocel_lengthGuess re_velocel = @s re_velocel_velX
+execute if score #re_velocel_lengthGuess re_velocel matches ..-1 run scoreboard players operation #re_velocel_lengthGuess re_velocel *= #re_velocel_-1 re_velocel
+
+scoreboard players operation #re_velocel_val re_velocel = @s re_velocel_velZ
+execute if score #re_velocel_val re_velocel matches ..-1 run scoreboard players operation #re_velocel_val re_velocel *= #re_velocel_-1 re_velocel
+
+scoreboard players operation #re_velocel_lengthGuess re_velocel > #re_velocel_val re_velocel
 
 # ニュートン法を3回
-scoreboard players operation #re_velocel_velLengthN_ re_velocel = #re_velocel_velLengthN re_velocel
-execute if score #re_velocel_velLengthX re_velocel matches 0 run scoreboard players set #re_velocel_velLengthX re_velocel 1
-scoreboard players operation #re_velocel_velLengthN_ re_velocel /= #re_velocel_velLengthX re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel += #re_velocel_velLengthN_ re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel /= #2 const
-# 
-scoreboard players operation #re_velocel_velLengthN_ re_velocel = #re_velocel_velLengthN re_velocel
-execute if score #re_velocel_velLengthX re_velocel matches 0 run scoreboard players set #re_velocel_velLengthX re_velocel 1
-scoreboard players operation #re_velocel_velLengthN_ re_velocel /= #re_velocel_velLengthX re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel += #re_velocel_velLengthN_ re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel /= #2 const
+scoreboard players operation #re_velocel_val re_velocel = #re_velocel_lengthN re_velocel
+execute if score #re_velocel_lengthGuess re_velocel matches 0 run scoreboard players set #re_velocel_lengthGuess re_velocel 1
+scoreboard players operation #re_velocel_val re_velocel /= #re_velocel_lengthGuess re_velocel
+scoreboard players operation #re_velocel_lengthGuess re_velocel += #re_velocel_val re_velocel
+scoreboard players operation #re_velocel_lengthGuess re_velocel /= #2 const
+#
+scoreboard players operation #re_velocel_val re_velocel = #re_velocel_lengthN re_velocel
+execute if score #re_velocel_lengthGuess re_velocel matches 0 run scoreboard players set #re_velocel_lengthGuess re_velocel 1
+scoreboard players operation #re_velocel_val re_velocel /= #re_velocel_lengthGuess re_velocel
+scoreboard players operation #re_velocel_lengthGuess re_velocel += #re_velocel_val re_velocel
+scoreboard players operation #re_velocel_lengthGuess re_velocel /= #2 const
 
-scoreboard players operation #re_velocel_velLengthN_ re_velocel = #re_velocel_velLengthN re_velocel
-execute if score #re_velocel_velLengthX re_velocel matches 0 run scoreboard players set #re_velocel_velLengthX re_velocel 1
-scoreboard players operation #re_velocel_velLengthN_ re_velocel /= #re_velocel_velLengthX re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel += #re_velocel_velLengthN_ re_velocel
-scoreboard players operation #re_velocel_velLengthX re_velocel /= #2 const
+scoreboard players operation #re_velocel_val re_velocel = #re_velocel_lengthN re_velocel
+execute if score #re_velocel_lengthGuess re_velocel matches 0 run scoreboard players set #re_velocel_lengthGuess re_velocel 1
+scoreboard players operation #re_velocel_val re_velocel /= #re_velocel_lengthGuess re_velocel
+scoreboard players operation #re_velocel_lengthGuess re_velocel += #re_velocel_val re_velocel
+scoreboard players operation #re_velocel_lengthGuess re_velocel /= #2 const
 
-scoreboard players operation @s re_velocel_velLengthXZ = #re_velocel_velLengthX re_velocel
+scoreboard players operation @s re_velocel_velLengthXZ = #re_velocel_lengthGuess re_velocel
 
 # リセット　負荷が増えるのでしなくていいかな
-# scoreboard players reset #re_velocel_prevPosX re_velocel
-# scoreboard players reset #re_velocel_prevPosY re_velocel
-# scoreboard players reset #re_velocel_prevPosZ re_velocel
-
-# scoreboard players reset #re_velocel_prevVelX re_velocel
-# scoreboard players reset #re_velocel_prevVelY re_velocel
-# scoreboard players reset #re_velocel_prevVelZ re_velocel
+# scoreboard players reset #re_velocel_prevPos re_velocel
+# scoreboard players reset #re_velocel_prevVel re_velocel
 
 # scoreboard players reset #re_velocel_matrixX re_velocel
 # scoreboard players reset #re_velocel_matrixZ re_velocel
@@ -237,10 +228,5 @@ scoreboard players operation @s re_velocel_velLengthXZ = #re_velocel_velLengthX 
 # scoreboard players reset re_velocel_val re_velocel
 # scoreboard players reset re_velocel_total re_velocel
 
-# scoreboard players reset #re_velocel_velX^2 re_velocel
-# scoreboard players reset #re_velocel_velZ^2 re_velocel
-# scoreboard players reset #re_velocel_velLengthX re_velocel
-# scoreboard players reset #re_velocel_velLengthN re_velocel
-# scoreboard players reset #re_velocel_velLengthN_ re_velocel
-# scoreboard players reset #re_velocel_velAbsX re_velocel
-# scoreboard players reset #re_velocel_velAbsZ re_velocel
+# scoreboard players reset #re_velocel_lengthN re_velocel
+# scoreboard players reset #re_velocel_lengthGuess re_velocel
